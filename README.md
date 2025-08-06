@@ -40,6 +40,6 @@ Get the repo:
 # How to use
 Create a keybind. Example in hyprland:
   ```plaintext
-  bind = SUPER SHIFT, D, exec, $HOME/.config/simplewayshot/simplewayshot.sh
+  bind = SUPER SHIFT, D, exec, path/to/simplewayshot.sh
   ```
 This will execute the bash script and prompt you with a rofi menu.
