@@ -3,7 +3,7 @@ Simple bash script to take screenshots in wayland. Allows for you to choose
 to screenshot the entire screen(if using multple screens, it will prompt you to choose for one)
 or a region of the screen.
 
-  > ***Note:*** This is been tested in Arch based distros. 
+  > ***Note:*** This has only been tested in Arch Based Distros. 
   
 # Install
 First install the following dependencies ***(Important)***:
