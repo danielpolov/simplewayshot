@@ -7,19 +7,19 @@ wheretosave=/tmp/
 main_dir="$(dirname "$(realpath "$0")")"
 
 exec_rofi() {
-	rofi -theme-str 'window {location: center; anchor: center; fullscreen: false; width: 250px;}' \
+	rofi -theme-str 'window {location: center; anchor: center; fullscreen: false; width: 450px;}' \
 		-theme-str 'mainbox {children: [ "message", "listview" ];}' \
-		-theme-str 'listview {columns: 2; lines: 1;}' \
+		-theme-str 'listview {columns: 3; lines: 1;}' \
 		-theme-str 'element-text {horizontal-align: 0.5;}' \
 		-theme-str 'textbox {horizontal-align: 0.5;}' \
 		-dmenu \
 		-p 'Options' \
-		-mesg 'SS Options' \
+		-mesg 'ScreenShot Options' \
 		-theme $main_dir/rofi-theme/style-2.rasi
 	}
 
 show_options() {
-	echo -e "Screen\nRegion" | exec_rofi
+	echo -e "Screen\nRegion\nCancel" | exec_rofi
 }
 
 option_to_ss=$(show_options)
@@ -34,7 +34,7 @@ save_ss(){
 	wheretosave=$(zenity --file-selection --save --filename=$shotname 2> /dev/null)
 	if [ "$wheretosave" != "/tmp/" ]; then
 		mv /tmp/$shotname $wheretosave
-		notify-send -i $wheretosave --app-name=$appname "Saving ss in as $wheretosave"
+		notify-send -i $wheretosave --app-name=$appname "Saving SS as $wheretosave"
 	fi
 }
 
