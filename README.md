@@ -10,6 +10,7 @@ First install the following dependencies ***(Important)***:
   * zenity - Basic gtk dialog windows.
   * wlr-randr - To Manage display settings.
   * rofi-waylad - To display options to the user in a simple menu.
+
 Quick installation commands:
   * From Arch official repositories:
     ```bash
