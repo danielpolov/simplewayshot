@@ -4,6 +4,7 @@
 shotname=Screenshot-$(date +'%F_%H-%M-%S').jpg
 appname=Wayshot
 wheretosave=/tmp/
+main_dir="$(dirname "$(realpath "$0")")"
 
 exec_rofi() {
 	rofi -theme-str 'window {location: center; anchor: center; fullscreen: false; width: 250px;}' \
@@ -14,8 +15,8 @@ exec_rofi() {
 		-dmenu \
 		-p 'Options' \
 		-mesg 'SS Options' \
-		-theme $HOME/.config/simplewayshot/rofi-theme/style-2.rasi
-}
+		-theme $main_dir/rofi-theme/style-2.rasi
+	}
 
 show_options() {
 	echo -e "Screen\nRegion" | exec_rofi
@@ -24,7 +25,7 @@ show_options() {
 option_to_ss=$(show_options)
 
 list_screens() {
-	echo $(wlr-randr --json | exec_rofi
+	echo $(wlr-randr --json | exec_rofi)
 }
 
 save_ss(){
@@ -54,3 +55,4 @@ case $option_to_ss in
 		notify-send -i dialog-cancel --app-name=$appname "Exiting SimpleWayshot, no ss was taken"
 		;;
 esac
+
