@@ -2,7 +2,7 @@
 
 #Default values
 shotname=Screenshot-$(date +'%F_%H-%M-%S').jpg
-appname=Wayshot
+appname=SimpleWayshot
 wheretosave=/tmp/
 main_opts=(" --extra-button=Screen" " --extra-button=Region")
 main_dir="$(dirname "$(realpath "$0")")"
@@ -15,7 +15,7 @@ exec_zen() {
 
 }
 
-option_to_ss=$(exec_zen "Simple Wayshot" "Choose an Option" main_opts)
+option_to_ss=$(exec_zen "What do you want to ScreenShot" "SimpleWayshot" main_opts)
 
 list_screens() {
 	echo $(wlr-randr --json | exec_rofi)
@@ -42,7 +42,7 @@ case $option_to_ss in
 			for screen in "${list_of_screens[@]}"; do
 				list_of_options+=(' --extra-button='"$screen")
 			done
-			screen_to_ss=$(exec_zen "Which Screen" "Simple Wayshot" list_of_options)
+			screen_to_ss=$(exec_zen "Which Screen" "SimpleWayshot" list_of_options)
 			grim -o $screen_to_ss $wheretosave$shotname
 		else
 			grim -o $(wlr-randr --json | awk -F'"' '/name/ {print $4}') $wheretosave$shotname
