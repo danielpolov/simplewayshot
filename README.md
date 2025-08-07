@@ -1,7 +1,5 @@
 # Description
-Simple bash script to take screenshots in wayland. Allows for you to choose
-to screenshot the entire screen(if using multple screens, it will prompt you to choose for one)
-or a region of the screen.
+Simple bash script that puts together multiple tools that allows you to take ScreenShots in Wayland.
 
   > ***Note:*** This has only been tested in Arch Based Distros. 
   
@@ -11,16 +9,11 @@ First install the following dependencies ***(Important)***:
   * slurp - Allows to select a region of the screen.
   * zenity - Basic gtk dialog windows.
   * wlr-randr - To Manage display settings.
-  * rofi-waylad - To display options to the user in a simple menu.
 
 Quick installation commands:
   * From Arch official repositories:
     ```bash
     sudo pacman -S grim slurp zenity wlr-randr
-    ```
-  * From the AUR:
-    ```bash
-    yay -S rofi-wayland
     ```
 Get the repo:
   * Jump where you want the repo to be installed. Eg:

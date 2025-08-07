@@ -1,28 +1,21 @@
-#!/bin/zsh
+#!/bin/bash
 
 #Default values
 shotname=Screenshot-$(date +'%F_%H-%M-%S').jpg
 appname=Wayshot
 wheretosave=/tmp/
+main_opts=(" --extra-button=Screen" " --extra-button=Region")
 main_dir="$(dirname "$(realpath "$0")")"
 
-exec_rofi() {
-	rofi -theme-str 'window {location: center; anchor: center; fullscreen: false; width: 450px;}' \
-		-theme-str 'mainbox {children: [ "message", "listview" ];}' \
-		-theme-str 'listview {columns: 3; lines: 1;}' \
-		-theme-str 'element-text {horizontal-align: 0.5;}' \
-		-theme-str 'textbox {horizontal-align: 0.5;}' \
-		-dmenu \
-		-p 'Options' \
-		-mesg 'ScreenShot Options' \
-		-theme $main_dir/rofi-theme/style-2.rasi
-	}
+exec_zen() {
 
-show_options() {
-	echo -e "Screen\nRegion\nCancel" | exec_rofi
+	local -n arr=$3
+
+	zenity --question --text="$1" --title="$2" ${arr[@]} --switch
+
 }
 
-option_to_ss=$(show_options)
+option_to_ss=$(exec_zen "Simple Wayshot" "Choose an Option" main_opts)
 
 list_screens() {
 	echo $(wlr-randr --json | exec_rofi)
@@ -43,7 +36,17 @@ save_ss(){
 case $option_to_ss in
 	"Screen")
 		no_screens=$(wlr-randr --json | awk -F'"' '/name/ {print $4}' | wc -l)
-		[ $no_screens -gt 1 ] && grim -o $list_screens $wheretosave$shotname ||	grim -o $(wlr-randr --json | awk -F'"' '/name/ {print $4}') $wheretosave$shotname
+		if [ no_screens -gt 1 ]; then
+			list_of_screens=($(wlr-randr --json | awk -F'"' '/name/ {print $4}'))
+			list_of_options=()
+			for screen in "${list_of_screens[@]}"; do
+				list_of_options+=(' --extra-button='"$screen")
+			done
+			screen_to_ss=$(exec_zen "Which Screen" "Simple Wayshot" list_of_options)
+			grim -o $screen_to_ss $wheretosave$shotname
+		else
+			grim -o $(wlr-randr --json | awk -F'"' '/name/ {print $4}') $wheretosave$shotname
+		fi
 		save_ss
 		;;
 	"Region")
