@@ -37,4 +37,5 @@ Create a keybind. Example in hyprland:
   ```plaintext
   bind = SUPER SHIFT, D, exec, path/to/simplewayshot.sh
   ```
-This will execute the bash script and prompt you with a rofi menu.
+ScreenShots will be provided.
+
