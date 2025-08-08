@@ -37,5 +37,5 @@ Create a keybind. Example in hyprland:
   ```plaintext
   bind = SUPER SHIFT, D, exec, path/to/simplewayshot.sh
   ```
-ScreenShots will be provided.
-
+When executing it this is what you'll see.
+![SimpleWayshot Options](screenshots/simplewayshot.jpg)
