@@ -18,8 +18,8 @@ Quick installation commands:
 Get the repo:
   * Clone the repo
     ```bash
-    git clone --depth 1 https://github.com/danielpolov/simplewayshot.git\
-    ~/.local/share/apps/simplewayshot
+    git clone --depth 1 https://github.com/danielpolov/simplewayshot.git \
+    $HOME/.local/share/apps/simplewayshot
     ```
   * Jump into folder:
     ```bash
