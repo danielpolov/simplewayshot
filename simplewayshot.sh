@@ -58,11 +58,16 @@ case $option_to_ss in
 		fi
 		;;
 	"Region")
-		grim -g "$(slurp)" $where_to_save$shotname
-		save_ss
+		region=$(slurp 2> /dev/null)
+		if [ "$region" != "" ]; then
+			grim -g "$region" $where_to_save$shotname
+			save_ss
+		else
+			notify_user_cancel "You din't select a Region, Nothing was saved"
+		fi
 		;;
 	*)
-		#Checks if the user canceled the action or not
+		#Checks if the user cancelled the action or not
 		notify_user_cancel "Exiting SimpleWayshot, no ss was taken"
 		;;
 esac
