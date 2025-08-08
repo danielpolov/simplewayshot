@@ -22,11 +22,12 @@ Get the repo:
     ```
   * Clone the repo
     ```bash
-    git clone https://github.com/danielpolov/simplewayshot.git
+    git clone --depth 1 https://github.com/danielpolov/simplewayshot.git\
+    ~/.local/share/apps/simplewayshot
     ```
   * Jump into folder:
     ```bash
-    cd simplewayshot
+    cd ~/.local/share/apps/simplewayshot
     ```
   * Make ***simplewayshot.sh** executable
     ```bash
@@ -35,7 +36,11 @@ Get the repo:
 # How to use
 Create a keybind. Example in hyprland:
   ```plaintext
-  bind = SUPER SHIFT, D, exec, path/to/simplewayshot.sh
+  bind = SUPER SHIFT, D, exec, ~/.local/share/apps/simplewayshot/simplewayshot.sh
+  ```
+Example in SwayWM:
+  ```plaintext
+  bindsym Mod4+Shift+d ~/.local/share/apps/simplewayshot/simplewayshot.sh
   ```
 When executing it this is what you'll see.
 ![SimpleWayshot Options](screenshots/simplewayshot.jpg)
