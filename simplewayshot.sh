@@ -3,7 +3,7 @@
 #Default values
 shotname=Screenshot-$(date +'%F_%H-%M-%S').jpg
 appname=SimpleWayshot
-wheretosave=/tmp/
+where_to_save=/tmp/
 main_opts=(" --extra-button=Screen" " --extra-button=Region")
 main_dir="$(dirname "$(realpath "$0")")"
 
@@ -15,27 +15,31 @@ exec_zen() {
 
 }
 
-option_to_ss=$(exec_zen "What do you want to ScreenShot" "SimpleWayshot" main_opts)
-
-list_screens() {
-	echo $(wlr-randr --json | exec_rofi)
-}
-
+#Prompts the user with a dialog windows
+#where they can choose the directory and save the SS
 save_ss(){
-	#Prompts the user with a dialog windows
-	#where they can choose the directory and save the SS
-	wheretosave=$(zenity --file-selection --save --filename=$shotname 2> /dev/null)
-	if [ "$wheretosave" != "/tmp/" ]; then
-		mv /tmp/$shotname $wheretosave
-		notify-send -i $wheretosave --app-name=$appname "Saving SS as $wheretosave"
+	where_to_save=$(zenity --file-selection --save --filename=$shotname 2> /dev/null)
+	if [ "$where_to_save" != "/tmp/" ]; then
+		mv /tmp/$shotname $where_to_save
+		notify-send -i $where_to_save --app-name=$appname "Saving SS as $where_to_save"
+	elif [ "$where_to_save" = "" ]; then
+		rm /tmp/$shotname
+	else
+		notify_user_cancel "You didn't select a Path, nothing was saved"
 	fi
 }
 
+notify_user_cancel(){
+	notify-send -i dialog-cancel --app-name=$appname "$1"
+}
+
+option_to_ss=$(exec_zen "What do you want to ScreenShot" "SimpleWayshot" main_opts)
 #Where the magic happens. using grim to take the Screenshot
 #and slurp to get the region of the screen
 case $option_to_ss in
 	"Screen")
 		no_screens=$(wlr-randr --json | awk -F'"' '/name/ {print $4}' | wc -l)
+		screen_to_ss=""
 		if [ no_screens -gt 1 ]; then
 			list_of_screens=($(wlr-randr --json | awk -F'"' '/name/ {print $4}'))
 			list_of_options=()
@@ -43,19 +47,23 @@ case $option_to_ss in
 				list_of_options+=(' --extra-button='"$screen")
 			done
 			screen_to_ss=$(exec_zen "Which Screen" "SimpleWayshot" list_of_options)
-			grim -o $screen_to_ss $wheretosave$shotname
 		else
-			grim -o $(wlr-randr --json | awk -F'"' '/name/ {print $4}') $wheretosave$shotname
+			screen_to_ss=$(wlr-randr --json | awk -F'"' '/name/ {print $4}')
 		fi
-		save_ss
+		if [ "$screen_to_ss" != "" ]; then
+			grim -o $screen_to_ss $where_to_save$shotname 2> /dev/null
+			save_ss
+		else
+			notify_user_cancel "You didn't select a Screen, nothing was saved"
+		fi
 		;;
 	"Region")
-		grim -g "$(slurp)" $wheretosave$shotname
+		grim -g "$(slurp)" $where_to_save$shotname
 		save_ss
 		;;
 	*)
 		#Checks if the user canceled the action or not
-		notify-send -i dialog-cancel --app-name=$appname "Exiting SimpleWayshot, no ss was taken"
+		notify_user_cancel "Exiting SimpleWayshot, no ss was taken"
 		;;
 esac
 
