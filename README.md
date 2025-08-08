@@ -16,10 +16,6 @@ Quick installation commands:
     sudo pacman -S grim slurp zenity wlr-randr
     ```
 Get the repo:
-  * Jump where you want the repo to be installed. Eg:
-    ```bash
-    cd $HOME/.config
-    ```
   * Clone the repo
     ```bash
     git clone --depth 1 https://github.com/danielpolov/simplewayshot.git\
