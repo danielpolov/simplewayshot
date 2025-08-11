@@ -25,7 +25,7 @@ save_ss(){
 	elif [ "$where_to_save" = "" ]; then
 		rm /tmp/$shotname
 	else
-		notify_user_cancel "You didn't select a Path. Nothing was saved"
+		notify_user_cancel "You didn't select a Path. Nothing was saved."
 	fi
 }
 
@@ -54,7 +54,7 @@ case $option_to_ss in
 			grim -o $screen_to_ss $where_to_save$shotname 2> /dev/null
 			save_ss
 		else
-			notify_user_cancel "You didn't select a Screen. Nothing was saved"
+			notify_user_cancel "You didn't select a Screen. Nothing was saved."
 		fi
 		;;
 	"Region")
@@ -63,12 +63,12 @@ case $option_to_ss in
 			grim -g "$region" $where_to_save$shotname
 			save_ss
 		else
-			notify_user_cancel "You din't select a Region. Nothing was saved"
+			notify_user_cancel "You din't select a Region. Nothing was saved."
 		fi
 		;;
 	*)
 		#Checks if the user cancelled the action or not
-		notify_user_cancel "Exiting SimpleWayshot. No ss was taken"
+		notify_user_cancel "Exiting SimpleWayshot. No ss was taken."
 		;;
 esac
 
