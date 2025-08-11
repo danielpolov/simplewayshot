@@ -25,7 +25,7 @@ save_ss(){
 	elif [ "$where_to_save" = "" ]; then
 		rm /tmp/$shotname
 	else
-		notify_user_cancel "You didn't select a Path. Nothing was saved."
+		notify_user_cancel "You didn't select a Path/Directory. Nothing was saved."
 	fi
 }
 
