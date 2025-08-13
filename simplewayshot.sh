@@ -25,11 +25,12 @@ save_ss(){
 			mv /tmp/$shotname $where_to_save
 			notify-send -i $where_to_save --app-name=$appname "Saving SS as $where_to_save"
 		else
+			clean_tmp
 			notify_user_cancel "You didn't select a Directory. Nothing was saved."
 		fi
 	else
-		clean_tmp
 		zenity --error --title="Fatal Error" --text="You do not have the correct permissions."
+		save_ss
 	fi
 }
 
