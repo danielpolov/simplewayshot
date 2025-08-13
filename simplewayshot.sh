@@ -8,24 +8,28 @@ main_opts=(" --extra-button=Screen" " --extra-button=Region")
 main_dir="$(dirname "$(realpath "$0")")"
 
 exec_zen() {
-
 	local -n arr=$3
-
 	zenity --question --text="$1" --title="$2" ${arr[@]} --switch
+}
 
+clean_tmp() {
+	rm /tmp/$shotname
 }
 
 #Prompts the user with a dialog windows
 #where they can choose the directory and save the SS
 save_ss(){
 	where_to_save=$(zenity --file-selection --save --filename=$shotname 2> /dev/null)
-	if [ "$where_to_save" != "/tmp/" ]; then
-		mv /tmp/$shotname $where_to_save
-		notify-send -i $where_to_save --app-name=$appname "Saving SS as $where_to_save"
-	elif [ "$where_to_save" = "" ]; then
-		rm /tmp/$shotname
+	if [ -w "$(dirname "$where_to_save")" ]; then
+		if [ "$where_to_save" != "" ]; then
+			mv /tmp/$shotname $where_to_save
+			notify-send -i $where_to_save --app-name=$appname "Saving SS as $where_to_save"
+		else
+			notify_user_cancel "You didn't select a Directory. Nothing was saved."
+		fi
 	else
-		notify_user_cancel "You didn't select a Path/Directory. Nothing was saved."
+		clean_tmp
+		zenity --error --title="Fatal Error" --text="You do not have the correct permissions."
 	fi
 }
 
