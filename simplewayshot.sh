@@ -1,13 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-#Default values
+#initial values
 shotname=Screenshot-$(date +'%F_%H-%M-%S').jpg
 appname=SimpleWayshot
 where_to_save=/tmp/
 main_opts=(" --extra-button=Screen" " --extra-button=Region")
 main_dir="$(dirname "$(realpath "$0")")"
 
-exec_zen() {
+zenity_opts() {
 	local -n arr=$3
 	zenity --question --text="$1" --title="$2" ${arr[@]} --switch
 }
@@ -16,8 +16,8 @@ clean_tmp() {
 	rm /tmp/$shotname
 }
 
-#Prompts the user with a dialog windows
-#where they can choose the directory and save the SS
+#Prompts the user with a dialog window
+#where they can choose the directory to save the ScreenShot
 save_ss(){
 	where_to_save=$(zenity --file-selection --save --filename=$shotname 2> /dev/null)
 	if [ -w "$(dirname "$where_to_save")" ]; then
@@ -38,20 +38,21 @@ notify_user_cancel(){
 	notify-send -i dialog-cancel --app-name=$appname "$1"
 }
 
-option_to_ss=$(exec_zen "What do you want to ScreenShot" "SimpleWayshot" main_opts)
 #Where the magic happens. using grim to take the Screenshot
-#and slurp to get the region of the screen
+#slurp to get the region of the screen
+#zenity to show the GTK dialog
+option_to_ss=$(zenity_opts "What do you want to ScreenShot" $appname main_opts)
 case $option_to_ss in
 	"Screen")
-		no_screens=$(wlr-randr --json | awk -F'"' '/name/ {print $4}' | wc -l)
+		no_screens=$(wlr-randr --json | jq 'map(select((.enabled? // .active? // .connected?) == true)) | length')
 		screen_to_ss=""
 		if [ no_screens -gt 1 ]; then
-			list_of_screens=($(wlr-randr --json | awk -F'"' '/name/ {print $4}'))
+			list_of_screens=($(wlr-randr --json | jq -r '.[] | select(.enabled? // .connected? // .active?) | .name'))
 			list_of_options=()
 			for screen in "${list_of_screens[@]}"; do
 				list_of_options+=(' --extra-button='"$screen")
 			done
-			screen_to_ss=$(exec_zen "Which Screen" "SimpleWayshot" list_of_options)
+			screen_to_ss=$(zenity_opts "Which Screen" $appname list_of_options)
 		else
 			screen_to_ss=$(wlr-randr --json | awk -F'"' '/name/ {print $4}')
 		fi
@@ -72,7 +73,7 @@ case $option_to_ss in
 		fi
 		;;
 	*)
-		#Checks if the user cancelled the action or not
+		#If the user closes the dialog, this will be executed
 		notify_user_cancel "Exiting SimpleWayshot. No ss was taken."
 		;;
 esac
