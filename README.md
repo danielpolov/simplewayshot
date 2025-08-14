@@ -1,5 +1,5 @@
 # Description
-Simple bash script that puts together multiple tools that allows you to take ScreenShots in Wayland.
+Simple bash script that puts together multiple tools that allows you to take ScreenShots in wlroots-based compositors.
 
   > ***Note:*** This has only been tested in Arch Based Distros. 
   
@@ -9,11 +9,12 @@ First install the following dependencies ***(Important)***:
   * slurp - Allows to select a region of the screen.
   * zenity - Basic gtk dialog windows.
   * wlr-randr - To Manage display settings.
+  * jq - To process JSON output
 
 Quick installation commands:
   * From Arch official repositories:
     ```bash
-    sudo pacman -S grim slurp zenity wlr-randr
+    sudo pacman -S grim slurp zenity wlr-randr jq
     ```
 Get the repo:
   * Clone the repo
