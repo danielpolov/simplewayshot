@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #initial values
-shotname=Screenshot-$(date +'%F_%H-%M-%S').jpg
+shotname=Screenshot-$(date +'%F_%H-%M-%S').png
 appname=SimpleWayshot
 where_to_save=/tmp/
 main_opts=(" --extra-button=Screen" " --extra-button=Region")
@@ -57,7 +57,7 @@ take_ss_options(){
 			else
 				screen_to_ss=$(wlr-randr --json | awk -F'"' '/name/ {print $4}')
 			fi
-			if [ ! -z "$screen_to_ss" ]; then
+			if [ -n "$screen_to_ss" ]; then
 				grim -o $screen_to_ss $where_to_save$shotname 2> /dev/null
 				save_ss
 			else
@@ -81,7 +81,7 @@ take_ss_screen() {
 
 take_ss_region() {
 	local region=$(slurp 2> /dev/null)
-	if [ ! -z "$region" ]; then
+	if [ -n "$region" ]; then
 		grim -g "$region" $where_to_save$shotname
 		save_ss
 	else
@@ -92,16 +92,16 @@ take_ss_region() {
 show_help() {
 	cat <<EOF
 	Usage: ${0##*/} [OPTIONS]
-	You can use one of the fllowing options.
-
+	You can use one of the following options.
+	
 	Options:
 	-h,   Show this help message
 	-s,   Uses the main screen to take the screenshot
 	-r,   Select a region to take the ScreenShot
 	-o,   Launches Zenity with two options(Screen or Region). If you have multiple screens, the screen option will prompt you with a list to select the one you want.
-
+	
 	Examples:
-	${0##*/} -s
+	${0##*/} -o
 EOF
 }
 
